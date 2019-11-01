@@ -57,7 +57,7 @@ class AllPokemonsQuery extends GraphQLQuery<AllPokemons, JsonSerializable> {
               arguments: [
                 ArgumentNode(
                     name: NameNode(value: 'first'),
-                    value: IntValueNode(value: '150'))
+                    value: IntValueNode(value: '151'))
               ],
               directives: [],
               selectionSet: SelectionSetNode(selections: [

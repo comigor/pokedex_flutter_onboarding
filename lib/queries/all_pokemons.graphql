@@ -1,5 +1,5 @@
 query allPokemons {
-  pokemons(first: 150) {
+  pokemons(first: 151) {
     id
     number
     name
