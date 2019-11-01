@@ -1,4 +1,3 @@
-import 'package:artemis/artemis.dart';
 import 'package:flutter/material.dart';
 import 'package:pokedex/bloc/pokemon_bloc.dart';
 import 'package:pokedex/data/pokemon.dart';
@@ -6,22 +5,14 @@ import 'package:pokedex/queries/all_pokemons_query.dart';
 import 'package:pokedex/widgets/toggled_image.dart';
 import 'package:provider/provider.dart';
 
-Future<List<Pokemon>> getAllPokemons() async {
-  final artemisClient = ArtemisClient('https://graphql-pokemon.now.sh');
-  final query = AllPokemonsQuery();
-
-  final response = await artemisClient.execute(query);
-
-  if (!response.hasErrors) {
-    return response.data.pokemons;
-  }
-  return [];
-}
-
 class Listing extends StatefulWidget {
   String filter;
+  Future<List<Pokemon>> Function() getAllPokemons;
 
-  Listing({this.filter = ''});
+  Listing({
+    this.filter = '',
+    this.getAllPokemons,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -39,7 +30,7 @@ class _ListingState extends State<Listing> {
   }
 
   void _initialize() async {
-    final response = await getAllPokemons();
+    final response = await widget.getAllPokemons();
     setState(() {
       pokemons = response;
     });
@@ -62,14 +53,18 @@ class _ListingState extends State<Listing> {
                 style: TextStyle(color: Colors.grey),
               );
 
+        final image = filtered[index].image != null
+            ? Hero(
+                child: ToggledImage(
+                  url: filtered[index].image,
+                  colorized: bloc.isCatch(filtered[index].id),
+                ),
+                tag: '${filtered[index].id}',
+              )
+            : null;
+
         return ListTile(
-          leading: Hero(
-            child: ToggledImage(
-              url: filtered[index].image,
-              colorized: bloc.isCatch(filtered[index].id),
-            ),
-            tag: '${filtered[index].id}',
-          ),
+          leading: image,
           title: title,
           onTap: () {
             Navigator.of(context).pushNamed(

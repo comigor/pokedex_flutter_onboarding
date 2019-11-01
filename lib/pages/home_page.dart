@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/queries/all_pokemons_query.dart';
 import 'package:pokedex/widgets/listing.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({
+    Key key,
+    this.title,
+    this.getAllPokemons,
+  }) : super(key: key);
 
   final String title;
+  Future<List<Pokemon>> Function() getAllPokemons;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -28,7 +34,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      body: Listing(filter: filter),
+      body: Listing(
+        filter: filter,
+        getAllPokemons: widget.getAllPokemons,
+      ),
     );
   }
 }

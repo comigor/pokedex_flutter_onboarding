@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/bloc/pokemon_bloc.dart';
 import 'package:pokedex/data/pokemon.dart';
 import 'package:pokedex/pages/home_page.dart';
+import 'package:pokedex/repositories/get_all_pokemon.dart';
 import 'package:provider/provider.dart';
 import 'pages/single_pokemon_page.dart';
 
@@ -19,7 +20,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.yellow,
         ),
         routes: {
-          '/': (_) => MyHomePage(title: 'Pokedéx'),
+          '/': (_) => MyHomePage(
+                title: 'Pokedéx',
+                getAllPokemons: getAllPokemons,
+              ),
           '/single': (context) {
             final info =
                 ModalRoute.of(context).settings.arguments as NavigationInfo;
