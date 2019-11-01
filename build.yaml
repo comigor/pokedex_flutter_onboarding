@@ -1,0 +1,12 @@
+targets:
+  $default:
+    builders:
+      artemis:
+        options:
+          schema_mapping:
+            - output: lib/queries/all_pokemons_query.dart
+              schema: lib/schema.json
+              queries_glob: lib/queries/all_pokemons.graphql
+            - output: lib/queries/single_pokemon_query.dart
+              schema: lib/schema.json
+              queries_glob: lib/queries/single_pokemon.graphql

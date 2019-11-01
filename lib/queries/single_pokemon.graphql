@@ -1,0 +1,14 @@
+query singlePokemon($id: String!) {
+  pokemon(id: $id) {
+    id
+    number
+    name
+    image
+    types
+    evolutions {
+      id
+      name
+      image
+    }
+  }
+}
