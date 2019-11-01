@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/bloc/pokemon_bloc.dart';
 import 'package:pokedex/widgets/listing.dart';
-import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -17,7 +15,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final image = Provider.of<PokemonBloc>(context).selectedPokemonImage;
     return Scaffold(
       appBar: AppBar(
         title: TextField(
@@ -30,7 +27,6 @@ class _MyHomePageState extends State<MyHomePage> {
             suffix: Icon(Icons.search),
           ),
         ),
-        leading: image == null ? null : Image.network(image),
       ),
       body: Listing(filter: filter),
     );

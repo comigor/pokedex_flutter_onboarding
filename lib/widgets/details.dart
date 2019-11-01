@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/bloc/pokemon_bloc.dart';
 import 'package:pokedex/data/pokemon.dart';
 import 'package:pokedex/queries/single_pokemon_query.dart';
+import 'package:pokedex/widgets/toggled_image.dart';
 import 'package:provider/provider.dart';
 
 Future<Pokemon> getSinglePokemon(String id) async {
@@ -27,7 +28,7 @@ class Details extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final image = Provider.of<PokemonBloc>(context).selectedPokemonImage;
+    final bloc = Provider.of<PokemonBloc>(context);
 
     return FutureBuilder<Pokemon>(
       future: getSinglePokemon(info.id),
@@ -41,7 +42,10 @@ class Details extends StatelessWidget {
                   style: TextStyle(fontSize: 48),
                 ),
                 Hero(
-                  child: Image.network(snapshot.data.image),
+                  child: ToggledImage(
+                    url: snapshot.data.image,
+                    colorized: bloc.isCatch(snapshot.data.id),
+                  ),
                   tag: snapshot.data.id,
                 ),
                 Text(
@@ -49,13 +53,15 @@ class Details extends StatelessWidget {
                   style: TextStyle(fontSize: 48),
                 ),
                 RaisedButton(
-                  child: Text('SELECT'),
-                  onPressed: image == null
-                      ? () {
-                          Provider.of<PokemonBloc>(context)
-                              .selectPokemon(snapshot.data.image);
-                        }
-                      : null,
+                  child: Text(
+                      bloc.isCatch(snapshot.data.id) ? 'RELEASE' : 'CATCH'),
+                  onPressed: () {
+                    if (bloc.isCatch(snapshot.data.id)) {
+                      bloc.releasePokemon(snapshot.data.id);
+                    } else {
+                      bloc.catchPokemon(snapshot.data.id);
+                    }
+                  },
                 ),
                 SizedBox(
                   height: 256,
@@ -64,7 +70,10 @@ class Details extends StatelessWidget {
                     children: (snapshot.data.evolutions ?? []).map((p) {
                       return InkWell(
                         child: Hero(
-                          child: Image.network(p.image),
+                          child: ToggledImage(
+                            url: p.image,
+                            colorized: bloc.isCatch(p.id),
+                          ),
                           tag: p.id,
                         ),
                         onTap: () {
@@ -85,7 +94,10 @@ class Details extends StatelessWidget {
             children: [
               CupertinoActivityIndicator(radius: 32),
               Hero(
-                child: Image.network(info.image),
+                child: ToggledImage(
+                  url: info.image,
+                  colorized: bloc.isCatch(info.id),
+                ),
                 tag: '${info.id}',
               ),
               CupertinoActivityIndicator(radius: 48),
