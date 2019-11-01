@@ -1,8 +1,10 @@
 import 'package:artemis/artemis.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pokedex/bloc/pokemon_bloc.dart';
 import 'package:pokedex/data/pokemon.dart';
 import 'package:pokedex/queries/single_pokemon_query.dart';
+import 'package:provider/provider.dart';
 
 Future<Pokemon> getSinglePokemon(String id) async {
   final artemisClient = ArtemisClient('https://graphql-pokemon.now.sh');
@@ -24,7 +26,9 @@ class Details extends StatelessWidget {
   Details(this.info);
 
   @override
-  Widget build(_) {
+  Widget build(context) {
+    final image = Provider.of<PokemonBloc>(context).selectedPokemonImage;
+
     return FutureBuilder<Pokemon>(
       future: getSinglePokemon(info.id),
       builder: (context, snapshot) {
@@ -43,6 +47,15 @@ class Details extends StatelessWidget {
                 Text(
                   snapshot.data.types.toString(),
                   style: TextStyle(fontSize: 48),
+                ),
+                RaisedButton(
+                  child: Text('SELECT'),
+                  onPressed: image == null
+                      ? () {
+                          Provider.of<PokemonBloc>(context)
+                              .selectPokemon(snapshot.data.image);
+                        }
+                      : null,
                 ),
                 SizedBox(
                   height: 256,
