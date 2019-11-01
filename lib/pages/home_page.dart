@@ -11,13 +11,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String filter = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: TextField(
+          onChanged: (t) {
+            setState(() {
+              filter = t;
+            });
+          },
+          decoration: InputDecoration(
+            icon: Icon(Icons.search),
+          ),
+        ),
       ),
-      body: Listing(),
+      body: Listing(filter: filter),
     );
   }
 }

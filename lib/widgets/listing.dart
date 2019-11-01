@@ -16,6 +16,10 @@ Future<List<Pokemon>> getAllPokemons() async {
 }
 
 class Listing extends StatefulWidget {
+  String filter;
+
+  Listing({this.filter = ''});
+
   @override
   State<StatefulWidget> createState() {
     return _ListingState();
@@ -40,21 +44,24 @@ class _ListingState extends State<Listing> {
 
   @override
   Widget build(_) {
+    final filtered = pokemons.where((p) {
+      return RegExp(widget.filter.toLowerCase()).hasMatch(p.name.toLowerCase());
+    }).toList();
     return ListView.builder(
-      itemCount: pokemons.length,
+      itemCount: filtered.length,
       itemBuilder: (_, index) {
         return ListTile(
           leading: Hero(
-            child: Image.network(pokemons[index].image),
-            tag: '${pokemons[index].id}',
+            child: Image.network(filtered[index].image),
+            tag: '${filtered[index].id}',
           ),
-          title: Text('${pokemons[index].number} - ${pokemons[index].name}'),
+          title: Text('${filtered[index].number} - ${filtered[index].name}'),
           onTap: () {
             Navigator.of(context).pushNamed(
               '/single',
               arguments: NavigationInfo(
-                pokemons[index].id,
-                pokemons[index].image,
+                filtered[index].id,
+                filtered[index].image,
               ),
             );
           },
