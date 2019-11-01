@@ -24,7 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           },
           decoration: InputDecoration(
-            icon: Icon(Icons.search),
+            suffix: Icon(Icons.search),
           ),
         ),
       ),

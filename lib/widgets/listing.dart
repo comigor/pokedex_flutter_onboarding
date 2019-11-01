@@ -45,7 +45,7 @@ class _ListingState extends State<Listing> {
   @override
   Widget build(_) {
     final filtered = pokemons.where((p) {
-      return RegExp(widget.filter.toLowerCase()).hasMatch(p.name.toLowerCase());
+      return p.name.toLowerCase().contains(widget.filter.toLowerCase());
     }).toList();
     return ListView.builder(
       itemCount: filtered.length,
