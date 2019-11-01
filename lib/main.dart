@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/data/pokemon.dart';
 import 'package:pokedex/pages/home_page.dart';
 import 'pages/single_pokemon_page.dart';
 
@@ -15,8 +16,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (_) => MyHomePage(title: 'Pokedéx'),
         '/single': (context) {
-          final id = ModalRoute.of(context).settings.arguments.toString();
-          return SinglePokemonPage(id);
+          final info =
+              ModalRoute.of(context).settings.arguments as NavigationInfo;
+          return SinglePokemonPage(info);
         },
       },
     );

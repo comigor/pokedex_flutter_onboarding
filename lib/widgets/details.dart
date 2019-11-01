@@ -1,6 +1,7 @@
 import 'package:artemis/artemis.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pokedex/data/pokemon.dart';
 import 'package:pokedex/queries/single_pokemon_query.dart';
 
 Future<Pokemon> getSinglePokemon(String id) async {
@@ -18,14 +19,14 @@ Future<Pokemon> getSinglePokemon(String id) async {
 }
 
 class Details extends StatelessWidget {
-  final String id;
+  final NavigationInfo info;
 
-  Details(this.id);
+  Details(this.info);
 
   @override
   Widget build(_) {
     return FutureBuilder<Pokemon>(
-      future: getSinglePokemon(id),
+      future: getSinglePokemon(info.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Center(
@@ -35,7 +36,10 @@ class Details extends StatelessWidget {
                   '${snapshot.data.number} - ${snapshot.data.name}',
                   style: TextStyle(fontSize: 48),
                 ),
-                Image.network(snapshot.data.image),
+                Hero(
+                  child: Image.network(snapshot.data.image),
+                  tag: snapshot.data.id,
+                ),
                 Text(
                   snapshot.data.types.toString(),
                   style: TextStyle(fontSize: 48),
@@ -46,10 +50,13 @@ class Details extends StatelessWidget {
                     crossAxisCount: 2,
                     children: (snapshot.data.evolutions ?? []).map((p) {
                       return InkWell(
-                        child: Image.network(p.image),
+                        child: Hero(
+                          child: Image.network(p.image),
+                          tag: p.id,
+                        ),
                         onTap: () {
-                          Navigator.of(context)
-                              .pushNamed('/single', arguments: p.id);
+                          Navigator.of(context).pushNamed('/single',
+                              arguments: NavigationInfo(p.id, p.image));
                         },
                       );
                     }).toList(),
@@ -61,8 +68,15 @@ class Details extends StatelessWidget {
         }
 
         return Center(
-          child: CupertinoActivityIndicator(
-            radius: 50,
+          child: Column(
+            children: [
+              CupertinoActivityIndicator(radius: 32),
+              Hero(
+                child: Image.network(info.image),
+                tag: '${info.id}',
+              ),
+              CupertinoActivityIndicator(radius: 48),
+            ],
           ),
         );
       },

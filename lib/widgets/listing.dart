@@ -1,5 +1,6 @@
 import 'package:artemis/artemis.dart';
 import 'package:flutter/material.dart';
+import 'package:pokedex/data/pokemon.dart';
 import 'package:pokedex/queries/all_pokemons_query.dart';
 
 Future<List<Pokemon>> getAllPokemons() async {
@@ -43,12 +44,18 @@ class _ListingState extends State<Listing> {
       itemCount: pokemons.length,
       itemBuilder: (_, index) {
         return ListTile(
-          leading: Image.network(pokemons[index].image),
+          leading: Hero(
+            child: Image.network(pokemons[index].image),
+            tag: '${pokemons[index].id}',
+          ),
           title: Text('${pokemons[index].number} - ${pokemons[index].name}'),
           onTap: () {
             Navigator.of(context).pushNamed(
               '/single',
-              arguments: pokemons[index].id,
+              arguments: NavigationInfo(
+                pokemons[index].id,
+                pokemons[index].image,
+              ),
             );
           },
         );

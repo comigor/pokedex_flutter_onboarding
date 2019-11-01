@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/data/pokemon.dart';
 import 'package:pokedex/widgets/details.dart';
 
 class SinglePokemonPage extends StatelessWidget {
-  final String id;
+  final NavigationInfo info;
 
-  SinglePokemonPage(this.id);
+  SinglePokemonPage(this.info);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Details(id),
+      body: Details(info),
     );
   }
 }
